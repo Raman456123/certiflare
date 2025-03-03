@@ -37,7 +37,7 @@ const Certificate = () => {
         const certificateData = await getCertificateById(id);
         
         if (certificateData) {
-          setCertificate(certificateData);
+          setCertificate(certificateData as Certificate);
         } else {
           setError(`Certificate with ID ${id} not found`);
           toast.error(`Certificate with ID ${id} not found`);

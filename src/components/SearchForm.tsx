@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 
 interface SearchFormProps {
   onSearch?: (query: string) => void;
@@ -15,21 +16,24 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, className = "" }) => 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!query.trim()) return;
+    const trimmedQuery = query.trim();
+    if (!trimmedQuery) {
+      toast.error("Please enter a certificate ID");
+      return;
+    }
     
     setIsSearching(true);
     
     // If onSearch prop exists, call it
     if (onSearch) {
-      onSearch(query);
+      onSearch(trimmedQuery);
       setIsSearching(false);
     } else {
       // Otherwise, navigate to certificate page with query
-      navigate(`/certificate/${query}`);
+      navigate(`/certificate/${trimmedQuery}`);
     }
     
-    // Reset form
-    setQuery('');
+    // Don't reset the form so users can see what they searched for
   };
 
   return (
@@ -57,6 +61,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, className = "" }) => 
           type="submit"
           disabled={isSearching}
           className="absolute right-1.5 top-1.5 rounded-full bg-primary text-white p-2 focus:outline-none focus-ring"
+          aria-label="Search certificates"
         >
           {isSearching ? (
             <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -70,6 +75,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, className = "" }) => 
           )}
         </motion.button>
       </div>
+      <p className="text-xs text-gray-500 mt-2">Enter the unique certificate ID to verify</p>
     </motion.form>
   );
 };
