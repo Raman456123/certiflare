@@ -1,21 +1,23 @@
 
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, query, where, getDocs, doc, getDoc, addDoc, setDoc } from 'firebase/firestore';
+import { getAnalytics } from 'firebase/analytics';
 
-// Firebase configuration
-// Replace these placeholder values with your actual Firebase config
+// Firebase configuration with your actual values
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyB5mxTkaSG1Kp5N-9UoKBt-u9yxUaRdsjA",
+  authDomain: "certificate-1fc48.firebaseapp.com",
+  projectId: "certificate-1fc48",
+  storageBucket: "certificate-1fc48.firebasestorage.app",
+  messagingSenderId: "973352710792",
+  appId: "1:973352710792:web:2b81a60075ed3f1039e53d",
+  measurementId: "G-TLBMTB95E5"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const analytics = getAnalytics(app);
 
 // Collection name for certificates
 const CERTIFICATES_COLLECTION = 'certificates';
