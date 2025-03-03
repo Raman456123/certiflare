@@ -84,6 +84,20 @@ const Navbar = () => {
                 Certificate Verification
               </Link>
             </motion.div>
+            
+            <motion.div 
+              custom={3}
+              variants={linkVariants}
+              initial="initial"
+              animate="animate"
+            >
+              <Link 
+                to="/admin" 
+                className={location.pathname.includes('/admin') ? activeLink : inactiveLink}
+              >
+                Admin
+              </Link>
+            </motion.div>
           </div>
         </div>
       </nav>

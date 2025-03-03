@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Home from "./pages/Home";
 import Certificate from "./pages/Certificate";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/" element={<Home />} />
             <Route path="/certificate" element={<Certificate />} />
             <Route path="/certificate/:id" element={<Certificate />} />
+            <Route path="/admin" element={<Admin />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -1,6 +1,6 @@
 
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, query, where, getDocs, doc, getDoc, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs, doc, getDoc, addDoc, setDoc } from 'firebase/firestore';
 
 // Firebase configuration
 // Replace these placeholder values with your actual Firebase config
@@ -74,6 +74,47 @@ export const searchCertificates = async (searchQuery: string) => {
   }
 };
 
+// Generate a unique certificate ID
+export const generateCertificateId = () => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = '';
+  
+  // Get current year
+  const year = new Date().getFullYear().toString().slice(-2);
+  
+  // First part is the year
+  result += year;
+  
+  // Add a hyphen
+  result += '-';
+  
+  // Generate 6 random characters
+  for (let i = 0; i < 6; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  
+  return result;
+};
+
+// Add a new certificate with a specific ID
+export const addCertificate = async (certificateId: string, certificateData: any) => {
+  try {
+    console.log('Adding certificate with ID:', certificateId, 'and data:', certificateData);
+    
+    // Create a reference to the document with the specific ID
+    const certificateRef = doc(db, CERTIFICATES_COLLECTION, certificateId);
+    
+    // Set the document data
+    await setDoc(certificateRef, certificateData);
+    
+    console.log('Certificate added successfully');
+    return { id: certificateId, ...certificateData };
+  } catch (error) {
+    console.error("Error adding certificate:", error);
+    throw error;
+  }
+};
+
 // Add a sample certificate (for testing purposes)
 export const addSampleCertificate = async () => {
   try {
@@ -90,19 +131,6 @@ export const addSampleCertificate = async () => {
     return docRef.id;
   } catch (error) {
     console.error("Error adding sample certificate:", error);
-    throw error;
-  }
-};
-
-// Add a certificate with a custom ID
-export const addCertificateWithId = async (certificateId: string, certificateData: any) => {
-  try {
-    const certificateRef = doc(db, CERTIFICATES_COLLECTION, certificateId);
-    await addDoc(certificateRef, certificateData);
-    console.log("Certificate added with ID:", certificateId);
-    return certificateId;
-  } catch (error) {
-    console.error("Error adding certificate with custom ID:", error);
     throw error;
   }
 };
