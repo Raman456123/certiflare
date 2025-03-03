@@ -103,14 +103,34 @@ export const addCertificate = async (certificateId: string, certificateData: any
   try {
     console.log('Adding certificate with ID:', certificateId, 'and data:', certificateData);
     
+    if (!certificateId) {
+      throw new Error('Certificate ID is required');
+    }
+    
+    // Validate required fields
+    if (!certificateData.holderName || !certificateData.event || !certificateData.issueDate) {
+      throw new Error('Missing required certificate data');
+    }
+    
     // Create a reference to the document with the specific ID
     const certificateRef = doc(db, CERTIFICATES_COLLECTION, certificateId);
     
-    // Set the document data
-    await setDoc(certificateRef, certificateData);
+    // Set the document data with merge option to ensure we don't overwrite existing data
+    await setDoc(certificateRef, {
+      ...certificateData,
+      createdAt: new Date().toISOString() // Add a timestamp
+    }, { merge: true });
     
-    console.log('Certificate added successfully');
-    return { id: certificateId, ...certificateData };
+    console.log('Certificate added successfully with ID:', certificateId);
+    
+    // Verify the certificate was added by retrieving it
+    const addedCertificate = await getDoc(certificateRef);
+    
+    if (!addedCertificate.exists()) {
+      throw new Error('Certificate was not saved properly');
+    }
+    
+    return { id: certificateId, ...addedCertificate.data() };
   } catch (error) {
     console.error("Error adding certificate:", error);
     throw error;

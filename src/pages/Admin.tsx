@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -62,7 +61,15 @@ const Admin = () => {
     setIsCertificateCreating(true);
     
     try {
-      await addCertificate(generatedId, {
+      console.log('Creating certificate with data:', {
+        holderName,
+        event,
+        issueDate,
+        issueTime: issueTime || '12:00',
+        year
+      });
+      
+      const result = await addCertificate(generatedId, {
         holderName,
         event,
         issueDate,
@@ -70,6 +77,7 @@ const Admin = () => {
         year,
       });
       
+      console.log('Certificate creation result:', result);
       toast.success(`Certificate created successfully with ID: ${generatedId}`);
       
       // Reset form
@@ -81,7 +89,7 @@ const Admin = () => {
       setGeneratedId('');
     } catch (error) {
       console.error('Error creating certificate:', error);
-      toast.error('Failed to create certificate. Please try again.');
+      toast.error(`Failed to create certificate: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsCertificateCreating(false);
     }
@@ -146,7 +154,7 @@ const Admin = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-primary text-white py-2 rounded-md hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-70"
+                  className="w-full bg-primary text-white py-2 rounded-md hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
                   {loading ? (
                     <span className="flex items-center justify-center">
